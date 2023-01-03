@@ -1,7 +1,9 @@
 <template>
   <li class="catalog__item">
-    <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}">
-      <img :src="product.image" :alt="product.title">
+    <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}" v-for="photo in product.colors" :key="photo.productId">
+      <div v-for="num in photo.gallery" :key="num.photoId">
+        <img :src="num.file.url" :alt="product.title">
+      </div>
     </router-link>
 
     <h3 class="catalog__title">

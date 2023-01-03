@@ -48,16 +48,13 @@
     components: { ProductList, BasePagination, ProductFilter },
     data() {
       return {
-        filterPriceFrom: 0,
-        filterPriceTo: 0,
+        filterPriceFrom: null,
+        filterPriceTo: null,
         filterCategoryId: 0,
         filterColorCheck: "",
-
         page: 1,
-        productsPerPage: 9,
-
+        productsPerPage: 12,
         productsData: null,
-
         productsLoading: false,
         productsLoadingFailed: false
       }
@@ -67,8 +64,7 @@
         return this.productsData
           ? this.productsData.items.map(product => {
             return {
-              ...product,
-              image: product.image.file.url
+              ...product
             }
           })
           : [];
