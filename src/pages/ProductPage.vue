@@ -36,8 +36,10 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <router-link :to="{name: 'product', params: {id: product.id}}">
-            <img width="570" height="570" :src="product.image" :alt="product.title">
+          <router-link :to="{name: 'product', params: {id: product.id}}" v-for="photo in product.colors" :key="photo.productId">
+            <div v-for="num in photo.gallery" :key="num.photoId">
+              <img width="570" height="570" :src="num.file.url" :alt="product.title">
+            </div>
           </router-link>
         </div>
         <ul class="pics__list">
@@ -79,7 +81,7 @@
               </div>
 
               <b class="item__price">
-                {{ product.price | numberFormat }} ₽
+                {{ product.price * productAmount | numberFormat }} ₽
               </b>
             </div>
 
