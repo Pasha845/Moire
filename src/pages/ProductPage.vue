@@ -36,22 +36,19 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <router-link :to="{name: 'product', params: {id: product.id}}" v-for="photo in product.colors" :key="photo.productId">
-            <div v-for="num in photo.gallery" :key="num.photoId">
-              <img width="570" height="570" :src="num.file.url" :alt="product.title">
+          <router-link v-for="(photo, index) in product.colors" :key="index" :to="{name: 'product', params: {id: product.id}}">
+            <div v-if="index == selectPhoto">
+              <div v-for="num in photo.gallery" :key="num.photoId">
+                <img width="570" height="570" :src="num.file.url" :alt="product.title">
+              </div>
             </div>
           </router-link>
         </div>
         <ul class="pics__list">
-          <li class="pics__item">
-            <a href="" class="pics__link pics__link--current">
-              <img width="98" height="98" src="img/phone-square-1.jpg" srcset="img/phone-square-1@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-          <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" src="img/phone-square-2.jpg" srcset="img/phone-square-2@2x.jpg 2x" alt="Название товара">
-            </a>
+          <li class="pics__item" v-for="(photo, index) in product.colors" :key="index">
+            <router-link class="pics__link" v-for="num in photo.gallery" :key="num.photoId" :to="{name: 'product', params: {id: product.id}}">
+              <img width="98" height="98" :src="num.file.url" :alt="product.title">
+            </router-link>
           </li>
         </ul>
       </div>
@@ -61,6 +58,7 @@
         <h2 class="item__title">
           {{ product.title }}
         </h2>
+
         <div class="item__form">
           <form class="form" action="#" method="POST" @submit.prevent="addToCart">
             <div class="item__row item__row--center">
@@ -89,37 +87,21 @@
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет</legend>
                 <ul class="colors colors--black">
-                  <li class="colors__item">
+                  <li class="colors__item" v-for="(color, index) in product.colors" v-bind:key="index">
                     <label class="colors__label">
-                      <input class="colors__radio sr-only" type="radio" name="color-item" value="blue" checked="">
-                      <span class="colors__value" style="background-color: #73B6EA;">
+                      <input class="colors__radio sr-only" type="radio" v-model="selectPhoto" :value="index">
+                      <span class="colors__value" :style="{ background: color.color.code}">
                       </span>
                     </label>
-                  </li>
-                  <li class="colors__item">
-                    <label class="colors__label">
-                      <input class="colors__radio sr-only" type="radio" name="color-item" value="yellow">
-                      <span class="colors__value" style="background-color: #FFBE15;">
-                      </span>
-                    </label>
-                  </li>
-                  <li class="colors__item">
-                    <label class="colors__label">
-                      <input class="colors__radio sr-only" type="radio" name="color-item" value="gray">
-                      <span class="colors__value" style="background-color: #939393;">
-                    </span></label>
                   </li>
                 </ul>
               </fieldset>
-
 
               <fieldset class="form__block">
                 <legend class="form__legend">Размер</legend>
                 <label class="form__label form__label--small form__label--select">
                   <select class="form__select" type="text" name="category">
-                    <option value="value1">37-39</option>
-                    <option value="value2">40-42</option>
-                    <option value="value3">42-50</option>
+                    <option v-bind:key="size.id" v-for="size in productData.sizes">{{ size.title }}</option>
                   </select>
                 </label>
               </fieldset>
@@ -190,6 +172,8 @@
   export default {
     data() {
       return {
+        selectPhoto: '',
+        selectSize: '',
         productAmount: 1,
         productData: null,
         productLoading: false,
@@ -218,7 +202,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.product.id, amount: this.productAmount})
+        this.addProductToCart({productId: this.selectColor.id, colorId: 21, sizeId: this.selectSize, amount: this.productAmount})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;

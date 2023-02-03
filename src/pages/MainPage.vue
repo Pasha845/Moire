@@ -1,14 +1,16 @@
 <template>
   <main class="content container">
-    <div class="content__top content__top--catalog">
-      <h1 class="content__title">
-        Каталог
-      </h1>
-      <span class="content__info">
-        152 товара
-      </span>
+    <div class="content__top">
+      <div class="content__row">
+        <h1 class="content__title">
+          Каталог
+        </h1>
+        <span class="content__info" v-if="countProducts == 0">товаров нет</span>
+        <span class="content__info" v-else-if="countProducts === 1">{{ countProducts }} товар</span>
+        <span class="content__info" v-else-if="countProducts <= 4">{{ countProducts }} товара</span>
+        <span class="content__info" v-else>{{ countProducts }} товаров</span>
+      </div>
     </div>
-
     <div class="content__catalog">
       
       <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId" :color-check.sync="filterColorCheck"></ProductFilter>
