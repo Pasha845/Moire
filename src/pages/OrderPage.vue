@@ -58,7 +58,7 @@
             <ul class="cart__options options">
               <li class="options__item" v-for="payment in paymentsData" :key="payment.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" v-model="currentPayment" :value="payment.id">
+                  <input class="options__radio sr-only" type="radio" name="pay" v-model="currentPayment" :value="payment">
                   <span class="options__value">
                     {{ payment.title }}
                   </span>
@@ -126,7 +126,9 @@
 
         axios
           .post(API_BASE_URL + '/api/orders', {
-            ...this.formData
+            ...this.formData,
+            deliveryTypeId: this.currentDelivery.id,
+            paymentTypeId: this.currentPayment.id
           }, {
             params: {
               userAccessKey: this.$store.state.userAccessKey

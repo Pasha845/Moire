@@ -6,14 +6,14 @@
           Каталог
         </h1>
         <span class="content__info" v-if="countProducts == 0">товаров нет</span>
-        <span class="content__info" v-else-if="countProducts === 1">{{ countProducts }} товар</span>
+        <span class="content__info" v-else-if="countProducts == 1">{{ countProducts }} товар</span>
         <span class="content__info" v-else-if="countProducts <= 4">{{ countProducts }} товара</span>
         <span class="content__info" v-else>{{ countProducts }} товаров</span>
       </div>
     </div>
     <div class="content__catalog">
       
-      <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId" :color-check.sync="filterColorCheck"></ProductFilter>
+      <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId" :color-id.sync="filterColorId" :material-id.sync="filterMaterialId"></ProductFilter>
 
       <section class="catalog">
 
@@ -53,7 +53,8 @@
         filterPriceFrom: null,
         filterPriceTo: null,
         filterCategoryId: 0,
-        filterColorCheck: "",
+        filterColorId: 0,
+        filterMaterialId: 0,
         page: 1,
         productsPerPage: 12,
         productsData: null,
@@ -88,7 +89,8 @@
               categoryId: this.filterCategoryId,
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
-              colorId: this.filterColorCheck
+              colorId: this.filterColorid,
+              materialId: this.filterMaterialId
             }
           })
           .then(response => this.productsData = response.data)
@@ -109,11 +111,14 @@
       filterPriceTo(){
         this.loadProducts();
       },
-      filterColorCheck(){
+      filterColorId(){
+        this.loadProducts();
+      },
+      filterMaterialId() {
         this.loadProducts();
       }
     },
-    created(){
+    created() {
       this.loadProducts();
     }
   };

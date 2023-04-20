@@ -90,8 +90,7 @@
                   <li class="colors__item" v-for="(color, index) in product.colors" v-bind:key="index">
                     <label class="colors__label">
                       <input class="colors__radio sr-only" type="radio" v-model="selectPhoto" :value="index">
-                      <span class="colors__value" :style="{ background: color.color.code}">
-                      </span>
+                      <span class="colors__value" :style="{ background: color.color.code}"></span>
                     </label>
                   </li>
                 </ul>
@@ -173,7 +172,7 @@
     data() {
       return {
         selectPhoto: '',
-        selectSize: '',
+        selectColor: 1,
         productAmount: 1,
         productData: null,
         productLoading: false,
@@ -202,7 +201,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.selectColor.id, colorId: 21, sizeId: this.selectSize, amount: this.productAmount})
+        this.addProductToCart({productId: this.product.id, colorId: 20, sizeId: 2, amount: this.productAmount})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;

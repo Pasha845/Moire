@@ -2,15 +2,15 @@
   <aside class="filter">
     <form class="filter__form form" action="#" method="get" @submit.prevent="submit">
       <fieldset class="form__block">
-      <legend class="form__legend">Цена</legend>
-      <label class="form__label form__label--price">
-        <input class="form__input" type="text" name="min-price" v-model.number="currentPriceFrom">
-        <span class="form__value">От</span>
-      </label>
-      <label class="form__label form__label--price">
-        <input class="form__input" type="text" name="max-price" v-model.number="currentPriceTo">
-        <span class="form__value">До</span>
-      </label>
+        <legend class="form__legend">Цена</legend>
+        <label class="form__label form__label--price">
+          <input class="form__input" type="text" name="min-price" v-model.number="currentPriceFrom">
+          <span class="form__value">От</span>
+        </label>
+        <label class="form__label form__label--price">
+          <input class="form__input" type="text" name="max-price" v-model.number="currentPriceTo">
+          <span class="form__value">До</span>
+        </label>
       </fieldset>
 
       <fieldset class="form__block">
@@ -26,9 +26,9 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" :value="color.id" v-for="color in colors" :key="color.id">
+          <li class="colors__item" v-for="(color, index) in colors" v-bind:key="index">
             <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color-item">
+              <input class="colors__radio sr-only" type="radio" name="color-item" v-model="currentColorId" :value="index">
               <span class="colors__value" :style="{ background: color.code }"></span>
             </label>
           </li>
@@ -37,10 +37,10 @@
 
       <fieldset class="form__block">
         <legend class="form__legend">Материал</legend>
-        <ul class="check-list">          
-          <li class="check-list__item" v-for="material in materials" :key="material.id">
+        <ul class="check-list">
+          <li class="check-list__item" v-for="(material, index) in materials" v-bind:key="index">
             <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="material">
+              <input class="check-list__check sr-only" type="checkbox" name="material" v-model="currentMaterialId" :value="index">
               <span class="check-list__desc">
                 {{ material.title }}
                 <span>({{ material.productsCount }})</span>
@@ -50,12 +50,14 @@
         </ul>
       </fieldset>
 
+      {{ currentMaterialId }}
+
       <fieldset class="form__block">
         <legend class="form__legend">Коллекция</legend>
         <ul class="check-list">
-          <li class="check-list__item" v-for="season in seasons" :key="season.id">
+          <li class="check-list__item" v-for="(season, index) in seasons" v-bind:key="index">
             <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="collection">
+              <input class="check-list__check sr-only" type="checkbox" name="collection" v-model="currentSeasonId" :value="index">
               <span class="check-list__desc">
                 {{ season.title }}
                 <span>({{ season.productsCount }})</span>
@@ -64,6 +66,8 @@
           </li>
         </ul>
       </fieldset>
+
+      {{ currentSeasonId }}
 
       <button class="filter__submit button button--primery" type="submit">
         Применить
