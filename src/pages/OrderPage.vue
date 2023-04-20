@@ -38,19 +38,17 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="0" checked="">
+              <li class="options__item" v-for="delivery in deliveriesData" :key="delivery.id">
+                <label v-if="delivery.price == 0" class="options__label">
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
                   <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
+                    {{ delivery.title }} <b>бесплатно</b>
                   </span>
                 </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="500">
+                <label v-else class="options__label">
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
                   <span class="options__value">
-                    Курьером <b>500 ₽</b>
+                    {{ delivery.title }} <b>{{ delivery.price | numberFormat }} ₽</b>
                   </span>
                 </label>
               </li>
@@ -58,19 +56,11 @@
 
             <h3 class="cart__title">Оплата</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="payment in paymentsData" :key="payment.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="card" checked="">
+                  <input class="options__radio sr-only" type="radio" name="pay" v-model="currentPayment" :value="payment">
                   <span class="options__value">
-                    Картой при получении
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="cash">
-                  <span class="options__value">
-                    Наличными при получении
+                    {{ payment.title }}
                   </span>
                 </label>
               </li>
@@ -84,8 +74,9 @@
           </ul>
           
           <div class="cart__total">
-            <p>Доставка: <b>290 ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice | numberFormat}} ₽</b></p>
+            <p v-if="currentDelivery.price == 0">Доставка: <b>бесплатно</b></p>
+            <p v-else>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
+            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ (totalPrice + currentDelivery.price) | numberFormat }} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -121,17 +112,23 @@
       return {
         formData: {},
         formError: {},
-        formErrorMessage: ''
+        formErrorMessage: '',
+        currentDelivery: 0,
+        currentPayment: 0,
+        deliveriesData: null,
+        paymentsData: null
       }
     },
     methods: {
-      order(){
+      order() {
         this.formError = {};
         this.formErrorMessage = '';
 
         axios
           .post(API_BASE_URL + '/api/orders', {
-            ...this.formData
+            ...this.formData,
+            deliveryTypeId: this.currentDelivery.id,
+            paymentTypeId: this.currentPayment.id
           }, {
             params: {
               userAccessKey: this.$store.state.userAccessKey
@@ -146,7 +143,19 @@
             this.formError = error.response.data.error.request || {};
             this.formErrorMessage = error.response.data.error.message;
           })
+      },
+      loadDelivery() {
+        axios.get(API_BASE_URL + '/api/deliveries')
+          .then(response => this.deliveriesData = response.data);
+      },
+      loadPayments() {
+        axios.get(API_BASE_URL + '/api/payments?deliveryTypeId=1')
+          .then(response => this.paymentsData = response.data);
       }
+    },
+    created() {
+      this.loadDelivery();
+      this.loadPayments();
     },
     filters: {
       numberFormat

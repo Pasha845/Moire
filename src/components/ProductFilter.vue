@@ -2,110 +2,72 @@
   <aside class="filter">
     <form class="filter__form form" action="#" method="get" @submit.prevent="submit">
       <fieldset class="form__block">
-      <legend class="form__legend">Цена</legend>
-      <label class="form__label form__label--price">
-        <input class="form__input" type="text" name="min-price" v-model.number="currentPriceFrom">
-        <span class="form__value">От</span>
-      </label>
-      <label class="form__label form__label--price">
-        <input class="form__input" type="text" name="max-price" v-model.number="currentPriceTo">
-        <span class="form__value">До</span>
-      </label>
+        <legend class="form__legend">Цена</legend>
+        <label class="form__label form__label--price">
+          <input class="form__input" type="text" name="min-price" v-model.number="currentPriceFrom">
+          <span class="form__value">От</span>
+        </label>
+        <label class="form__label form__label--price">
+          <input class="form__input" type="text" name="max-price" v-model.number="currentPriceTo">
+          <span class="form__value">До</span>
+        </label>
       </fieldset>
 
       <fieldset class="form__block">
-      <legend class="form__legend">Категория</legend>
-      <label class="form__label form__label--select">
-        <select class="form__select" type="text" name="category" v-model.number="currentCategoryId">
-          <option value="0">Все категории</option>
-          <option v-bind:value="category.id" v-for="category in categories" :key="category.id">{{ category.title }}</option>
-        </select>
-      </label>
+        <legend class="form__legend">Категория</legend>
+        <label class="form__label form__label--select">
+          <select class="form__select" type="text" name="category" v-model.number="currentCategoryId">
+            <option value="0">Все категории</option>
+            <option v-bind:value="category.id" v-for="category in categories" :key="category.id">{{ category.title }}</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="form__block">
+        <legend class="form__legend">Цвет</legend>
+        <ul class="colors">
+          <li class="colors__item" v-for="(color, index) in colors" v-bind:key="index">
+            <label class="colors__label">
+              <input class="colors__radio sr-only" type="radio" name="color-item" v-model="currentColorId" :value="index">
+              <span class="colors__value" :style="{ background: color.code }"></span>
+            </label>
+          </li>
+        </ul>
       </fieldset>
 
       <fieldset class="form__block">
         <legend class="form__legend">Материал</legend>
-        <ul class="check-list">          
-          <li class="check-list__item">
+        <ul class="check-list">
+          <li class="check-list__item" v-for="(material, index) in materials" v-bind:key="index">
             <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="material" value="лен">
+              <input class="check-list__check sr-only" type="checkbox" name="material" v-model="currentMaterialId" :value="index">
               <span class="check-list__desc">
-                лен 
-                <span>(3)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="material" value="хлопок">
-              <span class="check-list__desc">
-                хлопок 
-                <span>(46)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="material" value="шерсть">
-              <span class="check-list__desc">
-                шерсть 
-                <span>(20)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="material" value="шелк">
-              <span class="check-list__desc">
-                шелк 
-                <span>(30)</span>
+                {{ material.title }}
+                <span>({{ material.productsCount }})</span>
               </span>
             </label>
           </li>
         </ul>
       </fieldset>
 
+      {{ currentMaterialId }}
+
       <fieldset class="form__block">
         <legend class="form__legend">Коллекция</legend>
         <ul class="check-list">
-          <li class="check-list__item">
+          <li class="check-list__item" v-for="(season, index) in seasons" v-bind:key="index">
             <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="collection" value="лето" checked="">
+              <input class="check-list__check sr-only" type="checkbox" name="collection" v-model="currentSeasonId" :value="index">
               <span class="check-list__desc">
-                лето 
-                <span>(2)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="collection" value="зима">
-              <span class="check-list__desc">
-                зима 
-                <span>(53)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="collection" value="весна">
-              <span class="check-list__desc">
-                весна 
-                <span>(24)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="collection" value="осень">
-              <span class="check-list__desc">
-                осень 
-                <span>(30)</span>
+                {{ season.title }}
+                <span>({{ season.productsCount }})</span>
               </span>
             </label>
           </li>
         </ul>
       </fieldset>
+
+      {{ currentSeasonId }}
 
       <button class="filter__submit button button--primery" type="submit">
         Применить
@@ -127,15 +89,28 @@
         currentPriceFrom: 0,
         currentPriceTo: 0,
         currentCategoryId: 0,
-        currentColorCheck: '',
-
-        categoriesData: null
+        currentColorId: 0,
+        currentMaterialId: 0,
+        currentSeasonId: 0,
+        categoriesData: null,
+        colorsData: null,
+        materialsData: null,
+        seasonsData: null
       }
     },
-    props: ['priceFrom', 'priceTo', 'categoryId', 'colorCheck'],
+    props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'materialId', 'seasonId'],
     computed: {
       categories() {
         return this.categoriesData ? this.categoriesData.items : [];
+      },
+      colors() {
+        return this.colorsData ? this.colorsData.items : [];
+      },
+      materials() {
+        return this.materialsData ? this.materialsData.items : [];
+      },
+      seasons() {
+        return this.seasonsData ? this.seasonsData.items : [];
       }
     },
     watch: {
@@ -148,8 +123,14 @@
       categoryId(value) {
         this.currentCategoryId = value;
       },
-      colorCheck(value) {
-        this.currentColorCheck = value;
+      colorId(value) {
+        this.currentColorId = value;
+      },
+      materialId(value) {
+        this.currentMaterialId = value;
+      },
+      seasonId(value) {
+        this.currentSeasonId = value;
       }
     },
     methods: {
@@ -157,21 +138,40 @@
         this.$emit('update:priceFrom', this.currentPriceFrom);
         this.$emit('update:priceTo', this.currentPriceTo);
         this.$emit('update:categoryId', this.currentCategoryId);
-        this.$emit('update:colorCheck', this.currentColorCheck);
+        this.$emit('update:colorId', this.currentColorId);
+        this.$emit('update:materialId', this.currentMaterialId);
+        this.$emit('update:seasonId', this.currentSeasonId);
       },
       reset() {
         this.$emit('update:priceFrom', 0);
         this.$emit('update:priceTo', 0);
         this.$emit('update:categoryId', 0);
-        this.$emit('update:colorCheck', 0);
+        this.$emit('update:colorId', 0);
+        this.$emit('update:materialId', 0);
+        this.$emit('update:seasonId', 0);
       },
       loadCategories() {
         axios.get(API_BASE_URL + '/api/productCategories')
           .then(response => this.categoriesData = response.data);
-      }
+      },
+      loadColors() {
+        axios.get(API_BASE_URL + '/api/colors')
+          .then(response => this.colorsData = response.data);
+      },
+      loadMaterials() {
+        axios.get(API_BASE_URL + '/api/materials')
+          .then(response => this.materialsData = response.data);
+      },
+      loadSeasons() {
+        axios.get(API_BASE_URL + '/api/seasons')
+          .then(response => this.seasonsData = response.data);
+      },
     },
     created() {
       this.loadCategories();
+      this.loadColors();
+      this.loadMaterials();
+      this.loadSeasons();
     }
   }
 </script>

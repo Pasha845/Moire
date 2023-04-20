@@ -33,7 +33,7 @@
           </li>
           <li>
             <a class="footer__link" href="mailto:hi@technozavrrr.com">
-              hi@technozavrrr.com
+              hello@moire.com
             </a>
           </li>
           <li>
